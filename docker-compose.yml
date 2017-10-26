@@ -1,0 +1,56 @@
+version: '3'
+
+networks:
+    frontend:
+        driver: bridge
+    backend:
+        driver: bridge
+
+services:
+    backend:
+        build:
+            context: .
+            dockerfile: Dockerfile-backend
+        volumes:
+            - './code:${CODE_DIR}'
+        depends_on:
+            - sql
+        networks:
+            - backend
+
+    fpm:
+        build:
+            context: .
+            dockerfile: Dockerfile-fpm
+        volumes:
+            - './code:${CODE_DIR}'
+        depends_on:
+            - sql
+        networks:
+            - frontend
+
+    nginx:
+        image: 'nginx:1.13.5-alpine'
+        ports:
+            - "8000:80"
+        volumes:
+            - './code:${CODE_DIR}'
+            - './nginx.default.conf:/etc/nginx/conf.d/default.conf'
+        depends_on:
+            - sql
+            - fpm
+        networks:
+            - frontend
+
+    sql:
+        image: 'mariadb:latest'
+        ports: 
+            - '3306:3306'
+        environment:
+            - 'MYSQL_ROOT_PASSWORD=root'
+            - 'MYSQL_DATABASE=app'
+            - 'MYSQL_USER=app'
+            - 'MYSQL_PASSWORD=appassword'
+        networks: 
+            - backend
+            - frontend
