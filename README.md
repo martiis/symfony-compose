@@ -12,3 +12,11 @@ Extra installed extensions for php:
  - gd
  - intl
  - opcache
+
+Setup:
+ - `rm -fr ./code`
+ - `symfony new code`
+ - `docker-compose up`
+ - `127.0.0.1:8000`
+ 
+To access container for development run `docker-compose run backend sh`
