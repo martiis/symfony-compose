@@ -15,4 +15,6 @@ A lightweight docker-compose file for Symfony app.
 
 ### How to start:
 `rm -fr ./code && symfony new code && docker-compose up`
+
+
 Server runs on `127.0.0.1:8000`. To access container for development run `docker-compose run backend sh`
